@@ -107,7 +107,7 @@ var nodes = new vis.DataSet([
     id: 3, shape: 'icon',
     icon: {
       face: "'FontAwesome'",
-      code: "\uf00c",
+      code: "\uf14a",
       size: 50,
       color: "#f0a30a",
     }, borderWidth: 2, x: 550, y: 100
@@ -180,3 +180,10 @@ var options = {
   }
 };
 var network = new vis.Network(container, data, options);
+
+window.addEventListener("load", function () {
+  setTimeout(function () {
+    // create a network
+    const network = new vis.Network(container, data, options);
+  }, 500);
+});
