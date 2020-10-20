@@ -122,7 +122,7 @@ var nodes = new vis.DataSet([
       color: "green",
     },x: 50, y: 100
   },
-  { id: 6, label: "Audit\nlogs", shape: "square", color: "#90EE90", x: 300, y: 250 },
+  { id: 6, label: "Audit\nlogs", shape: "square", color: "#85C1E9  ", x: 300, y: 250 },
   {
     id: 7, shape: 'icon',
     icon: {
@@ -130,7 +130,7 @@ var nodes = new vis.DataSet([
       code: "\uf084",
       size: 30,
       color: "#f0a30a",
-    }, x: 500, y: 80
+    }, x: 510, y: 80
   },
   {
     id: 8, shape: 'icon',
@@ -143,6 +143,8 @@ var nodes = new vis.DataSet([
   },
 ]);
 
+var digital_embassy_blue = { id: 1, label: "SGX Vault", shape: "square", color: "#97C2FC", size: 40, x: 300, y: 100 }
+var digital_embassy_green = { id: 1, label: "SGX Vault", shape: "square", color: "#28B463", size: 40, x: 300, y: 100 }
 var load_weights_node = { id: 2, label: "Load\nWeights", shape: "box", color: "#FFFF00", size: 15, x: 450, y: 100 }
 var right_tick_node = { id: 3, shape: 'icon', icon: { face: "'FontAwesome'", code: "\uf00c", size: 50, color: "green", }, borderWidth: 2, x: 550, y: 100 }
 var right_cross_node = { id: 3, shape: 'icon', icon: { face: "'FontAwesome'", code: "\uf00d", size: 50, color: "red", }, borderWidth: 2, x: 550, y: 100 }
