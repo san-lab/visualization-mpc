@@ -107,9 +107,9 @@ var nodes = new vis.DataSet([
     id: 3, shape: 'icon',
     icon: {
       face: "'FontAwesome'",
-      code: "\uf14a",
+      code: "\uf00c",
       size: 50,
-      color: "#f0a30a",
+      color: "green",
     }, borderWidth: 2, x: 550, y: 100
   },
   { id: 4, label: "Ask for\npricing", shape: "box", size: 15, color: "#FFFF00", x: 150, y: 100 },
@@ -119,7 +119,7 @@ var nodes = new vis.DataSet([
       face: "'FontAwesome'",
       code: "\uf00c",
       size: 50,
-      color: "#f0a30a",
+      color: "green",
     }, borderWidth: 2, x: 50, y: 100
   },
   { id: 6, label: "Audit\nlogs", shape: "square", color: "#C2FABC", x: 300, y: 250 },
@@ -128,18 +128,18 @@ var nodes = new vis.DataSet([
     icon: {
       face: "'FontAwesome'",
       code: "\uf084",
-      size: 50,
+      size: 30,
       color: "#f0a30a",
-    }, borderWidth: 2, x: 450, y: 0
+    }, borderWidth: 2, x: 500, y: 80
   },
   {
     id: 8, shape: 'icon',
     icon: {
       face: "'FontAwesome'",
       code: "\uf084",
-      size: 50,
+      size: 30,
       color: "#f0a30a",
-    }, borderWidth: 2, x: 150, y: 0
+    }, borderWidth: 2, x: 100, y: 80
   },
 ]);
 
@@ -155,8 +155,8 @@ var edges = new vis.DataSet([
   },
   { from: 2, to: 3, color: "rgb(20,24,200)" },
   { from: 4, to: 5, color: "rgb(20,24,200)" },
-  { from: 7, to: 2, color: "rgb(20,24,200)", arrows: "to" },
-  { from: 8, to: 4, color: "rgb(20,24,200)", arrows: "to" },
+  //{ from: 7, to: 2, color: "rgb(20,24,200)", arrows: "to" },
+  //{ from: 8, to: 4, color: "rgb(20,24,200)", arrows: "to" },
 ]);
 
 // create a network
