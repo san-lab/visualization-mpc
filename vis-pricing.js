@@ -637,7 +637,7 @@ fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/agentmock')
 
     function timeout() {
       setTimeout(function () {
-        fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/agentmock')
+        fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/json?ID=123456')
           .then(response => response.json())
           .then(state => {
             //state = states_test[num]
