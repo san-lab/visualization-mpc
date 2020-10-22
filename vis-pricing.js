@@ -3,7 +3,7 @@ fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/agentmock')
   .then(state => {
 
     var states_test = [
-          {},{ //1
+          { //1
             "ID": "Mock Agent's ID",
             "Title": "Mock Pricing Agent",
             "Description": "A 'mock' dataset to start connecting with VIS.JS",
@@ -556,10 +556,12 @@ fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/agentmock')
               setTimeout(function() {
                 nodes.add(right_document_node);
                 nodes.add(right_tick_node);
-                nodes.add(ask_pricing_node(0)); 
-                nodes.add(ask_pricing_node(1));
-                nodes.add(ask_pricing_node(2));
-                nodes.add(ask_pricing_node(3));
+                if(nodes.get(13) == null){
+                  nodes.add(ask_pricing_node(0)); 
+                  nodes.add(ask_pricing_node(1));
+                  nodes.add(ask_pricing_node(2));
+                  nodes.add(ask_pricing_node(3));
+                }
               },3500)
             }
             else if (state["ModelIntput"]["SignatureOK"] == false) {
@@ -579,7 +581,13 @@ fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/agentmock')
         }
         if (state["InvocationInputs"] != null){
           if(state["InvocationInputs"].length > prevState["numPricing"]){
-            let remaining_Calls = state["InvocationLimit"]-state["InvocationCount"] 
+            let remaining_Calls = state["InvocationLimit"]-state["InvocationCount"]
+            if(nodes.get(13) == null){
+              nodes.add(ask_pricing_node(0)); 
+              nodes.add(ask_pricing_node(1));
+              nodes.add(ask_pricing_node(2));
+              nodes.add(ask_pricing_node(3));
+            }
             for(let i = prevState["numPricing"]; i < state["InvocationInputs"].length; i++){
               nodes.update({id: 13+i, title: state["InvocationInputs"][i]["DataPlain"]});
               if (state["InvocationInputs"][i]["SignatureOK"] == true) {
@@ -633,14 +641,14 @@ fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/agentmock')
       "init": undefined,
       "numPricing": 0,
     }
-    //var num = 0;
+    var num = 0;
 
     function timeout() {
       setTimeout(function () {
         fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/json?ID=123456')
           .then(response => response.json())
           .then(state => {
-            //state = states_test[num]
+            state = states_test[num]
             prevState = updateNodes(nodes, state,prevState);
             var data = {
               nodes: nodes,
@@ -648,7 +656,7 @@ fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/agentmock')
             };
             var network = new vis.Network(container, data, options);
           })
-        //num=num+1
+        num=num+1
         timeout();
       }, 5000);
     };
