@@ -1,30 +1,34 @@
-fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/agentmock')
+fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/json?ID=111111')
   .then(response => response.json())
   .then(state => {
 
+    var starting_ask_pricing_node = 500;
+    var starting_left_doc_node = 600;
+    var starting_tick_node = 700;
+    var starting_left_key_node = 800;
+
     var digital_embassy_blue =  [{ id: 29, shape: "square", color: "white", size: 1, x: 580, y: 100 },{ id: 9, label: "Pricing agent", shape: "square", color: "white", size: 1, x: 300, y: 18 },{ id: 1, label: "", shape: "square", color: "#97C2FC", size: 80, x: 300, y: 100 }]
-    var digital_embassy_green = (remainingCalls) => {return  [{ id: 29, shape: "square", color: "white", size: 1, x: 580, y: 100 },{ id: 10, label: remainingCalls.toString(10), shape: "box", color: "#28B463", font: {color:(remainingCalls>0) ? 'white' : 'red'}, size: 10, x: 300, y: 100 },{ id: 9, label: "Pricing agent", shape: "square", color: "white", size: 1, x: 300, y: 18 },{ id: 1, label: "", shape: "square", color: "#28B463", size: 80, x: 300, y: 100 }]}
-    var load_weights_node = (data) => { return { id: 2, label: "Load\nWeights", shape: "box", color: "#FFFF00", size: 15, x: 435, y: 100, title: data } }
-    var right_tick_node = { id: 3, shape: 'icon', icon: { face: "'FontAwesome'", code: "\uf00c", size: 20, color: "green", }, borderWidth: 2, x: 580, y: 80 }
-    var right_cross_node = { id: 3, shape: 'icon', icon: { face: "'FontAwesome'", code: "\uf00d", size: 20, color: "red", }, borderWidth: 2, x: 580, y: 80 }
-    var right_document_node = { id: 11, shape: 'icon', icon: { face: "'FontAwesome'", code: "\uf15c", size: 40, color: "black", }, borderWidth: 2, x: 550, y: 100 }
-    var left_tick_node = (numUser) => {return { id: 21+numUser, shape: 'icon', icon: { face: "'FontAwesome'", code: "\uf00c", size: 20, color: "green", }, borderWidth: 2, x: 20, y: 5 + (50*numUser) }}
-    var left_cross_node = (numUser) => {return { id: 21+numUser, shape: 'icon', icon: { face: "'FontAwesome'", code: "\uf00d", size: 20, color: "red", }, borderWidth: 2, x: 20, y: 5 + (50*numUser) }}
-    var left_document_node = (numUser) => {return { id: 17+numUser, shape: 'icon', icon: { face: "'FontAwesome'", code: "\uf15c", size: 40, color: "black", }, borderWidth: 2, x: 50, y: 25 + (50*numUser) }}
-    var ask_pricing_node = (numUser) => { return { id: 13+numUser, label: "Ask for\npricing", shape: "box", size: 15, color: "#FFFF00", x: 165, y: 25 + (50*numUser)}} // 16
+    var digital_embassy_green = (maxCalls, remainingCalls) => {return  [{ id: 29, shape: "square", color: "white", size: 1, x: 580, y: 25 + (maxCalls-1)*25 },{ id: 10, label: remainingCalls.toString(10), shape: "box", color: "#28B463", font: {color:(remainingCalls>0) ? 'white' : 'red'}, size: 10, x: 300, y: 25 + (maxCalls-1)*25 },{ id: 9, label: "Pricing agent", shape: "square", color: "white", size: 1, x: 300, y: 25 + (maxCalls-1)*25 - 82 },{ id: 1, label: "", shape: "square", color: "#28B463", size: 80, x: 300, y: 25 + (maxCalls-1)*25 }]}
+    var load_weights_node = (maxCalls, data) => { return { id: 2, label: "Load\nWeights", shape: "box", color: "#FFFF00", size: 15, x: 435, y: 25 + (maxCalls-1)*25, title: data } }
+    var right_tick_node = (maxCalls) => { return { id: 3, shape: 'icon', icon: { face: "'FontAwesome'", code: "\uf00c", size: 20, color: "green", }, borderWidth: 2, x: 580, y: 25 + (maxCalls-1)*25 - 20 }}
+    var right_cross_node = (maxCalls) => { return { id: 3, shape: 'icon', icon: { face: "'FontAwesome'", code: "\uf00d", size: 20, color: "red", }, borderWidth: 2, x: 580, y: 25 + (maxCalls-1)*25 - 20 }}
+    var right_document_node = (maxCalls) => { return { id: 11, shape: 'icon', icon: { face: "'FontAwesome'", code: "\uf15c", size: 40, color: "black", }, borderWidth: 2, x: 550, y: 25 + (maxCalls-1)*25 }}
+    var left_tick_node = (numUser) => {return { id: starting_tick_node+numUser, shape: 'icon', icon: { face: "'FontAwesome'", code: "\uf00c", size: 20, color: "green", }, borderWidth: 2, x: 20, y: 5 + (50*numUser) }}
+    var left_cross_node = (numUser) => {return { id: starting_tick_node+numUser, shape: 'icon', icon: { face: "'FontAwesome'", code: "\uf00d", size: 20, color: "red", }, borderWidth: 2, x: 20, y: 5 + (50*numUser) }}
+    var left_document_node = (numUser) => {return { id: starting_left_doc_node+numUser, shape: 'icon', icon: { face: "'FontAwesome'", code: "\uf15c", size: 40, color: "black", }, borderWidth: 2, x: 50, y: 25 + (50*numUser) }}
+    var ask_pricing_node = (numUser) => { return { id: starting_ask_pricing_node+numUser, label: "Ask for\npricing", shape: "box", size: 15, color: "#FFFF00", x: 165, y: 25 + (50*numUser)}} // 16
     var audit_log_node = { id: 6, label: "Audit\nlogs", shape: "square", color: "#90EE90", x: 300, y: 250 }
-    var right_key_node = { id: 7, shape: 'icon', icon: { face: "'FontAwesome'", code: "\uf084", size: 30, color: "#f0a30a", }, x: 480, y: 80 }
-    var left_key_node = (numUser) => {return { id: 25+numUser, shape: 'icon', icon: { face: "'FontAwesome'", code: "\uf084", size: 30, color: "#f0a30a", }, x: 120, y: 5 + (50*numUser) }}
+    var right_key_node = (maxCalls) => { return { id: 7, shape: 'icon', icon: { face: "'FontAwesome'", code: "\uf084", size: 30, color: "#f0a30a", }, x: 480, y: 25 + (maxCalls-1)*25 - 20 }}
+    var left_key_node = (numUser) => {return { id: starting_left_key_node+numUser, shape: 'icon', icon: { face: "'FontAwesome'", code: "\uf084", size: 30, color: "#f0a30a", }, x: 120, y: 5 + (50*numUser) }}
 
     var nodes = new vis.DataSet([]);
+
+    var enclave_askPricing_edge = (num) => {return { from: 1, to: starting_ask_pricing_node + num, color: "rgb(20,24,200)", arrows: "from" }}
+    var askPricing_document_edge = (num) => {return { from: starting_ask_pricing_node + num, to: starting_left_doc_node + num, color: "rgb(20,24,200)" }}
 
     // create an array with edges
     var edges = new vis.DataSet([
       { from: 1, to: 2, color: "rgb(20,24,200)", arrows: "from" },
-      { from: 1, to: 13, color: "rgb(20,24,200)", arrows: "from" },
-      { from: 1, to: 14, color: "rgb(20,24,200)", arrows: "from" },
-      { from: 1, to: 15, color: "rgb(20,24,200)", arrows: "from" },
-      { from: 1, to: 16, color: "rgb(20,24,200)", arrows: "from" },
       {
         from: 1,
         to: 6,
@@ -32,13 +36,9 @@ fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/agentmock')
         arrows: "to",
       },
       { from: 2, to: 11, color: "rgb(20,24,200)" },
-      { from: 13, to: 17, color: "rgb(20,24,200)" },
-      { from: 14, to: 18, color: "rgb(20,24,200)" },
-      { from: 15, to: 19, color: "rgb(20,24,200)" },
-      { from: 16, to: 20, color: "rgb(20,24,200)" },
     ]);
 
-    var updateNodes = (nodes,state, prevState) => {
+    var updateNodesAndEdges = (edges, nodes,state, prevState) => {
       //If not undefined we will have the Central node in blue unless it is already initialized
       let newPrevState = prevState
       if (state != undefined) {
@@ -48,26 +48,27 @@ fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/agentmock')
               nodes.remove([1,9,29])
             }
             newPrevState["init"] = true;
-            nodes.add(digital_embassy_green(state["InvocationLimit"]-state["InvocationCount"]));
-            nodes.add(load_weights_node(state["ModelIntput"]["DataPlain"]));
+            nodes.add(digital_embassy_green(state["InvocationLimit"], state["InvocationLimit"]-state["InvocationCount"]));
+            nodes.add(load_weights_node(state["InvocationLimit"],state["ModelIntput"]["DataPlain"]));
             if (state["ModelIntput"]["SignatureOK"] == true) {
-              nodes.add(right_key_node);
+              nodes.add(right_key_node(state["InvocationLimit"]));
               setTimeout(function() {
-                nodes.add(right_document_node);
-                nodes.add(right_tick_node);
-                if(nodes.get(13) == null){
-                  nodes.add(ask_pricing_node(0)); 
-                  nodes.add(ask_pricing_node(1));
-                  nodes.add(ask_pricing_node(2));
-                  nodes.add(ask_pricing_node(3));
+                nodes.add(right_document_node(state["InvocationLimit"]));
+                nodes.add(right_tick_node(state["InvocationLimit"]));
+                if(nodes.get(starting_ask_pricing_node) == null){
+                  for(let i = 0; i < state["InvocationLimit"]; i++){
+                    nodes.add(ask_pricing_node(i));
+                    edges.add(enclave_askPricing_edge(i));
+                    edges.add(askPricing_document_edge(i));
+                  }  
                 }
               },3500)
             }
             else if (state["ModelIntput"]["SignatureOK"] == false) {
-              nodes.add(right_key_node);
+              nodes.add(right_key_node(state["InvocationLimit"]));
               setTimeout(function() {
-                nodes.add(right_document_node);
-                nodes.add(right_cross_node);
+                nodes.add(right_document_node(state["InvocationLimit"]));
+                nodes.add(right_cross_node(state["InvocationLimit"]));
               },3500)
             }
           }
@@ -81,14 +82,15 @@ fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/agentmock')
         if (state["InvocationInputs"] != null){
           if(state["InvocationInputs"].length > prevState["numPricing"]){
             let remaining_Calls = state["InvocationLimit"]-state["InvocationCount"]
-            if(nodes.get(13) == null){
-              nodes.add(ask_pricing_node(0)); 
-              nodes.add(ask_pricing_node(1));
-              nodes.add(ask_pricing_node(2));
-              nodes.add(ask_pricing_node(3));
+            if(nodes.get(starting_ask_pricing_node) == null){
+              for(let i = 0; i < state["InvocationLimit"]; i++){
+                nodes.add(ask_pricing_node(i));
+                edges.add(enclave_askPricing_edge(i));
+                edges.add(askPricing_document_edge(i));
+              }
             }
             for(let i = prevState["numPricing"]; i < state["InvocationInputs"].length; i++){
-              nodes.update({id: 13+i, title: state["InvocationInputs"][i]["DataPlain"]});
+              nodes.update({id: starting_ask_pricing_node+i, title: state["InvocationInputs"][i]["DataPlain"]});
               if (state["InvocationInputs"][i]["SignatureOK"] == true && state["InvocationInputs"][i]["ParsingOK"]==true) {
                 nodes.add(left_key_node(i));
                 setTimeout(function() {
@@ -144,11 +146,11 @@ fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/agentmock')
 
     function timeout() {
       setTimeout(function () {
-        fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/json?ID=123456')
+        fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/json?ID=111111')
           .then(response => response.json())
           .then(state => {
             //state = states_test[num]
-            prevState = updateNodes(nodes, state,prevState);
+            prevState = updateNodesAndEdges(edges, nodes, state,prevState);
             var data = {
               nodes: nodes,
               edges: edges,
