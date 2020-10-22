@@ -89,7 +89,7 @@ fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/agentmock')
             }
             for(let i = prevState["numPricing"]; i < state["InvocationInputs"].length; i++){
               nodes.update({id: 13+i, title: state["InvocationInputs"][i]["DataPlain"]});
-              if (state["InvocationInputs"][i]["SignatureOK"] == true) {
+              if (state["InvocationInputs"][i]["SignatureOK"] == true && state["InvocationInputs"][i]["ParsingOK"]==true) {
                 nodes.add(left_key_node(i));
                 setTimeout(function() {
                   nodes.add(left_document_node(i));
@@ -97,7 +97,7 @@ fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/agentmock')
                   nodes.update({ id: 10, label: remaining_Calls.toString(10), font: {color:(remaining_Calls>0) ? 'white' : 'red'}});
                 },3500)
               }
-              else if (state["InvocationInputs"][i]["SignatureOK"] == false) {
+              else if (state["InvocationInputs"][i]["SignatureOK"] == false || state["InvocationInputs"][i]["ParsingOK"]==false) {
                 nodes.add(left_key_node(i));
                 setTimeout(function() {
                   nodes.add(left_document_node(i));
@@ -147,8 +147,8 @@ fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/agentmock')
         fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/json?ID=123456')
           .then(response => response.json())
           .then(state => {
-            state = states_test[num]
-            //prevState = updateNodes(nodes, state,prevState);
+            //state = states_test[num]
+            prevState = updateNodes(nodes, state,prevState);
             var data = {
               nodes: nodes,
               edges: edges,
