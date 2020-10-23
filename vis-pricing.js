@@ -1,4 +1,4 @@
-fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/json?ID=111111')
+fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/json?ID=222222')
   .then(response => response.json())
   .then(state => {
 
@@ -50,6 +50,8 @@ fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/json?ID=111111')
             newPrevState["init"] = true;
             nodes.add(digital_embassy_green(state["InvocationLimit"], state["InvocationLimit"]-state["InvocationCount"]));
             nodes.add(load_weights_node(state["InvocationLimit"],state["ModelIntput"]["DataPlain"]));
+            nodes.update({id: 2, title: state["ModelIntput"]["DataEncrypted"]});
+              
             if (state["ModelIntput"]["SignatureOK"] == true) {
               nodes.add(right_key_node(state["InvocationLimit"]));
               setTimeout(function() {
@@ -90,13 +92,15 @@ fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/json?ID=111111')
               }
             }
             for(let i = prevState["numPricing"]; i < state["InvocationInputs"].length; i++){
-              nodes.update({id: starting_ask_pricing_node+i, title: state["InvocationInputs"][i]["DataPlain"]});
+              nodes.update({id: starting_ask_pricing_node+i, title: state["InvocationInputs"][i]["DataEncrypted"]});
               if (state["InvocationInputs"][i]["SignatureOK"] == true && state["InvocationInputs"][i]["ParsingOK"]==true) {
                 nodes.add(left_key_node(i));
                 setTimeout(function() {
                   nodes.add(left_document_node(i));
                   nodes.add(left_tick_node(i));
-                  nodes.update({ id: 10, label: remaining_Calls.toString(10), font: {color:(remaining_Calls>0) ? 'white' : 'red'}});
+                  nodes.update({ id: 10, color: (remaining_Calls>0) ? "#28B463" : "#A4A4A4", label: remaining_Calls.toString(10), font: {color:(remaining_Calls>0) ? 'white' : 'red'}});
+                  nodes.update({ id: 1, color: (remaining_Calls>0) ? "#28B463" : "#A4A4A4"});
+                  nodes.update({ id: 9, label: (remaining_Calls>0) ? "Pricing agent" : "Pricing agent\n (exhausted)"})
                 },3500)
               }
               else if (state["InvocationInputs"][i]["SignatureOK"] == false || state["InvocationInputs"][i]["ParsingOK"]==false) {
@@ -104,7 +108,12 @@ fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/json?ID=111111')
                 setTimeout(function() {
                   nodes.add(left_document_node(i));
                   nodes.add(left_cross_node(i));
-                  nodes.update({ id: 10, label: remaining_Calls.toString(10), font: {color:(remaining_Calls>0) ? 'white' : 'red'}});
+                  if(state["InvocationInputs"][i]["SignatureOK"] == false){
+                    nodes.update({ id: starting_tick_node+i, title: "Error on signature checking"})
+                  }
+                  else {
+                    nodes.update({ id: starting_tick_node+i, title: JSON.stringify(state["InvocationInputs"][i]["Error"])})
+                  }
                 },3500)
               }
             }
@@ -146,7 +155,7 @@ fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/json?ID=111111')
 
     function timeout() {
       setTimeout(function () {
-        fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/json?ID=111111')
+        fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/json?ID=222222')
           .then(response => response.json())
           .then(state => {
             //state = states_test[num]
