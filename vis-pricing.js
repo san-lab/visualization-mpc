@@ -1,4 +1,4 @@
-fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/json?ID=004006')
+fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/json?ID=443322')
   .then(response => response.json())
   .then(state => {
 
@@ -167,6 +167,11 @@ fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/json?ID=004006')
               }
             }
             for(let i = prevState["numPricing"]; i < state["InvocationInputs"].length; i++){
+              if(i >= state["InvocationLimit"]){
+                nodes.add(ask_pricing_node(i));
+                edges.add(enclave_askPricing_edge(i));
+                edges.add(askPricing_document_edge(i));
+              }
               nodes.update({id: starting_ask_pricing_node+i, title: state["InvocationInputs"][i]["DataEncrypted"]});
               nodes.add(starting_open_envelope(i,state["InvocationLimit"]));
               if(i == 0){
@@ -249,7 +254,7 @@ fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/json?ID=004006')
 
     function timeout() {
       setTimeout(function () {
-        fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/json?ID=004006')
+        fetch('https://researchbox1.uksouth.cloudapp.azure.com/pricing/json?ID=443322')
           .then(response => response.json())
           .then(state => {
             prevState = updateNodesAndEdges(edges, nodes, state,prevState);
