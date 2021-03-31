@@ -4,7 +4,7 @@
     //////////////NODES//////////////
 
     var node_off = (x_pos,y_pos,id_num, title_hover) => { return { id: id_num, shape: 'icon', icon: { face: "'FontAwesome'", code: "\uf1b2", size: 40, color: "black", }, borderWidth: 2, x: x_pos, y: y_pos, title:  title_hover}}
-    var node_on = (x_pos,y_pos,id_num, title_hover) => { return { id: id_num, shape: 'icon', icon: { face: "'FontAwesome'", code: "\uf1b2", size: 40, color: "green", }, borderWidth: 2, x: x_pos, y: y_pos, title:  title_hover}}
+    var node_on = (x_pos,y_pos,id_num, title_hover, color) => { return { id: id_num, shape: 'icon', icon: { face: "'FontAwesome'", code: "\uf1b2", size: 40, color: color, }, borderWidth: 2, x: x_pos, y: y_pos, title:  title_hover}}
     
     var nodes = new vis.DataSet([]);
 
@@ -19,12 +19,13 @@
       //State machine
       numNodes = state["Nodes"].length + 1
       titles = []
-      titles.push(buildTitle(state["ThisName"], state["ThisId"],state["ThisAddress"]))
+      titles.push(buildTitle(state["ThisName"], state["ThisId"], state["ThisAddress"],state["PendingJobs"], state["DoneJobs"]))
       for(let i = numNodesInserted; i < numNodes-1; i++){
-        titles.push(buildTitle(state["Nodes"][i]["Name"], state["Nodes"][i]["ID"], state["Nodes"][i]["Address"]))
+        titles.push(buildTitle(state["Nodes"][i]["Name"], state["Nodes"][i]["ID"], state["Nodes"][i]["Address"], state["Nodes"][i]["PendingJobs"], state["Nodes"][i]["DoneJobs"]))
       } 
       for(let i = numNodesInserted; i < numNodes; i++){
-        nodes.add(node_on(0, 0,i, titles[i]));
+        var randomColor = '#'+(Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
+        nodes.add(node_on(0, 0,i, titles[i], randomColor));
         if (i > 0) {
           for(let j = 0; j < i; j++){
             edges.add(between_nodes(j,i));
@@ -34,8 +35,21 @@
       return numNodes             
     }
 
-    var buildTitle = (name, ID, address) => {
-      return "Name: " + name + "\n" + "ID: " + ID + "\n" + "Address: " + address
+    var buildTitle = (name, ID, address, pending, done) => {
+      var NodeInfo = "Name: " + name + "\n" + "ID: " + ID + "\n" + "Address: " + address + "\n"
+      var PendingJobs = "\nPending Jobs \n"
+      if (pending.length > 0){
+        for (let i = 0; i < pending.length; i++){
+          PendingJobs += pending[i]["ID"] + "->" + pending[i]["Type"] + "\n"
+        }
+      }
+      var DoneJobs = "\nDone Jobs \n"
+      if (done.length > 0){
+        for (let i = 0; i < done.length; i++){
+          DoneJobs += done[i]["ID"] + "->" + done[i]["Type"] + "\n"
+        }
+      }
+      return NodeInfo + PendingJobs + DoneJobs
     }
 
     //updateNodes(state);
@@ -81,34 +95,34 @@
   "ThisSecretValue": null,
   "ThisPublicKey": null,
   "DisableBroadcast": false,
-  "PendingJobs": {
-   "ID0f6017556475602505628": {
-    "JobID": "ID0f6017556475602505628",
+  "PendingJobs": [
+   {
+    "ID": "ID0f6017556475602505628",
     "AgentID": "6017556475602505628",
     "Type": "TestJob",
     "Finished": false,
     "Error": "",
     "Payload": "Are you there?"
    },
-   "ID1f3089053916941511196": {
-    "JobID": "ID1f3089053916941511196",
+   {
+    "ID": "ID1f3089053916941511196",
     "AgentID": "3089053916941511196",
     "Type": "MPSignature",
     "Finished": false,
     "Error": "",
     "Payload": "02000000000000000000000000000000000000000000000000000000000000000212dc2ddad8ed72726c8e7d4daaeaba8480984f3efbfae14dd71f26182498ca154d93a90afdebeb0a815a3f258a9c866f36668767525ba7348f18db1c5f1157142439646639643439342d376333632d313165622d623865362d62383662323334383934623848656c6c6f20426f62"
    }
-  },
-  "DoneJobs": {
-   "ID0f3089053916941511196": {
-    "JobID": "ID0f3089053916941511196",
+  ],
+  "DoneJobs": [
+   {
+    "ID": "ID0f3089053916941511196",
     "AgentID": "3089053916941511196",
     "Type": "TestJob",
     "Finished": true,
     "Error": "",
     "Payload": "Are you there?"
    }
-  },
+  ],
   "JobBroadcast": {},
   "KnownScalarShares": {
    "9df9d494-7c3c-11eb-b8e6-b86b234894b8": [
@@ -135,11 +149,20 @@
     "Address": "172.17.0.3",
     "LastSeen": "2021-03-30T09:46:14.9856168Z",
     "PendingJobs": [
-     "ID1f3089053916941511196",
-     "ID0f6017556475602505628"
+     {
+      "ID": "ID1f3089053916941511196",
+      "Type": "TestJob"
+      }
     ],
     "DoneJobs": [
-     "ID0f3089053916941511196"
+      {
+      "ID": "ID0f3089053916941511196",
+      "Type": "TestJob"
+      },
+      {
+      "ID": "ID1f3089053916941511196",
+      "Type": "MPSignature"
+      }
     ]
    },
    {
@@ -148,21 +171,18 @@
     "Address": "172.17.0.4",
     "LastSeen": "2021-03-30T09:46:15.2296065Z",
     "PendingJobs": [
-     "ID0f3089053916941511196",
-     "ID0f6017556475602505628",
-     "ID1f3089053916941511196"
-    ],
-    "DoneJobs": []
-   },
-   {
-    "Name": "Denver",
-    "ID": "3877312406672063063",
-    "Address": "172.17.0.5",
-    "LastSeen": "2021-03-30T09:46:15.2296065Z",
-    "PendingJobs": [
-     "ID0f3089053916941511196",
-     "ID0f6017556475602505628",
-     "ID1f3089053916941511196"
+      {
+      "ID": "ID0f3089053916941511196",
+      "Type": "TestJob"
+      },
+      {
+      "ID": "ID0f6017556475602505628",
+      "Type": "MPSignature"
+      },
+      {
+      "ID": "ID1f3089053916941511196",
+      "Type": "TestJob"
+      }
     ],
     "DoneJobs": []
    }
